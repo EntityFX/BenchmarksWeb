@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace EntityFx.BenchmarkDb.Contracts
+namespace EntityFx.BenchmarkDb.Contracts.Cpu
 {
     public class CommonSpecs
     {

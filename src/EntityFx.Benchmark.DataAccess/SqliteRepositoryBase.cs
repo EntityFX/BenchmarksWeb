@@ -1,11 +1,11 @@
-﻿using Microsoft.Data.Sqlite;
-using System;
+﻿using System;
 using System.Data;
 using System.IO;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using Microsoft.Data.Sqlite;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     public class SqliteRepositoryBase : ISqliteRepository
     {

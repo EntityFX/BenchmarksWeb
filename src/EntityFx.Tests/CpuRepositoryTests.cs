@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
-using EntityFx.Benchmark.DataAccess;
 using EntityFx.BenchmarkDb.Contracts;
+using EntityFx.BenchmarkDb.Contracts.Cpu;
+using EntityFx.BenchmarkDb.DataAccess;
 using NUnit.Framework;
 
 namespace EntityFx.Tests

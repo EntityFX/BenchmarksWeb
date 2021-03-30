@@ -1,7 +1,4 @@
-﻿using Dapper;
-using EntityFx.BenchmarkDb.Contracts;
-
-namespace EntityFx.Benchmark.DataAccess
+﻿namespace EntityFx.BenchmarkDb.DataAccess
 {
     public interface ISqliteRepository
     {

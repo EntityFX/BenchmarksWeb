@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib.Extensions;
-using EntityFx.BenchmarkDb.Contracts;
 using EntityFx.BenchmarkDb.Contracts.Benchmark;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     public class BenchmarkResultsRepository : SqliteRepositoryBase, IBenchmarkResultsRepository
     {

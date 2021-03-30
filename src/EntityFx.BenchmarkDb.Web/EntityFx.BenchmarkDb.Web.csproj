@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityFx.Benchmark.DataAccess\EntityFx.Benchmark.DataAccess.csproj" />
+    <ProjectReference Include="..\EntityFx.Benchmark.DataAccess\EntityFx.BenchmarkDb.DataAccess.csproj" />
     <ProjectReference Include="..\EntityFx.BenchmarkDb.Contracts\EntityFx.BenchmarkDb.Contracts.csproj" />
   </ItemGroup>
 

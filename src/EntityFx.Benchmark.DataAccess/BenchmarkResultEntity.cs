@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     class BenchmarkResultEntity
     {

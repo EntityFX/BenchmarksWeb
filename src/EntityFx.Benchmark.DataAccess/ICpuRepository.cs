@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using EntityFx.BenchmarkDb.Contracts;
+using EntityFx.BenchmarkDb.Contracts.Cpu;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     public interface ICpuRepository
     {
-        void Create(BenchmarkDb.Contracts.Cpu cpu);
+        void Create(Cpu cpu);
 
         void Delete(int id);
 

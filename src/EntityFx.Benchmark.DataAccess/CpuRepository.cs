@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using EntityFx.BenchmarkDb.Contracts;
-using Microsoft.Data.Sqlite;
+using EntityFx.BenchmarkDb.Contracts.Cpu;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     public class CpuRepository : SqliteRepositoryBase, ICpuRepository
     {
-        public void Create(BenchmarkDb.Contracts.Cpu cpu)
+        public void Create(Cpu cpu)
         {
             try
             {
@@ -193,7 +191,7 @@ namespace EntityFx.Benchmark.DataAccess
             };
         }
 
-        private CpuEntity MapEntity(BenchmarkDb.Contracts.Cpu cpu)
+        private CpuEntity MapEntity(Cpu cpu)
         {
             return new CpuEntity()
             {

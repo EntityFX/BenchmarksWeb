@@ -1,4 +1,4 @@
-﻿namespace EntityFx.BenchmarkDb.Contracts
+﻿namespace EntityFx.BenchmarkDb.Contracts.Cpu
 {
     public enum CacheAssociativity
     {

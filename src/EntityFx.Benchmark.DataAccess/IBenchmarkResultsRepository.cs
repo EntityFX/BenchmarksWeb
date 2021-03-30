@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using EntityFx.BenchmarkDb.Contracts.Benchmark;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     public interface IBenchmarkResultsRepository
     {

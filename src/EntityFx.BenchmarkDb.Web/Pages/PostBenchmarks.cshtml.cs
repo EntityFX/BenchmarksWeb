@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using EntityFx.Benchmark.DataAccess;
 using EntityFx.BenchmarkDb.Contracts;
 using EntityFx.BenchmarkDb.Contracts.Benchmark;
+using EntityFx.BenchmarkDb.Contracts.Cpu;
+using EntityFx.BenchmarkDb.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace EntityFx.BenchmarkDb.Web
+namespace EntityFx.BenchmarkDb.Web.Pages
 {
     [IgnoreAntiforgeryToken()]
     public class PostBenchmarksModel : PageModel

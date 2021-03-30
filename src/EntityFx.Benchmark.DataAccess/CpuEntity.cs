@@ -1,7 +1,7 @@
-﻿using EntityFx.BenchmarkDb.Contracts;
-using System;
+﻿using System;
+using EntityFx.BenchmarkDb.Contracts.Cpu;
 
-namespace EntityFx.Benchmark.DataAccess
+namespace EntityFx.BenchmarkDb.DataAccess
 {
     internal class CpuEntity
     {

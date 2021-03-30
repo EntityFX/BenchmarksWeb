@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EntityFx.BenchmarkDb.Contracts
+namespace EntityFx.BenchmarkDb.Contracts.Cpu
 {
     public class Cache
     {
