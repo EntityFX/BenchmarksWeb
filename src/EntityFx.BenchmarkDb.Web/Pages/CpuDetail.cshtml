@@ -16,7 +16,12 @@
         = @<text>
         <div class="row">
             <div class="col-sm-3">@item.SizeKBytes KBytes</div>
-            <div class="col-sm-3">@((int) item.CacheAssociativity)-way</div>
+            <div class="col-sm-3">
+                @if (item?.CacheAssociativity != null)
+                {
+                    @((int)item?.CacheAssociativity)<text>-way</text>
+                }
+            </div>
             <div class="col-sm-3">Line Size: @item.LineSizeInBytes Bytes</div>
             <div class="col-sm-3">@if (item.IsShared == true) { <span>Shared</span> } else { <span>Per Core</span>}</div>
         </div>

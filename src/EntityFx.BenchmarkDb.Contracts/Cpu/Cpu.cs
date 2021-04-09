@@ -16,7 +16,7 @@
 
         public int? Family { get; set; }
         public int? Stepping { get; set; }
-        public int? Revision { get; set; }
+        public string Revision { get; set; }
         public int? ModelNumber { get; set; }
 
         public CommonSpecs Specs { get; set; }
