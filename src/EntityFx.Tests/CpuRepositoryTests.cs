@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Threading.Tasks;
 using EntityFx.BenchmarkDb.Contracts;
+using EntityFx.BenchmarkDb.Contracts.Benchmark;
 using EntityFx.BenchmarkDb.Contracts.Cpu;
 using EntityFx.BenchmarkDb.DataAccess;
 using NUnit.Framework;
@@ -35,6 +38,54 @@ namespace EntityFx.Tests
         }
 
         [Test]
+        public async Task TestRead()
+        {
+            SqliteRepositoryBase.FileNameInternal = "benchmarks.sqlite3";
+
+            var cpuRepository = new CpuRepository();
+
+            var cpus = (await cpuRepository.ReadAsync(new CpuFilter())).ToArray();
+        }
+
+        [Test]
+        public async Task LoadResults()
+        {
+            var results = File.ReadAllText("AllResults.json");
+            var benchmarks = JsonSerializer.Deserialize<Dictionary<string, BenchmarkImportItem>>(results);
+
+            SqliteRepositoryBase.FileNameInternal = "benchmarks.sqlite3";
+
+            var benchmarkResultsRepository = new BenchmarkResultsRepository();
+            var cpuRepository = new CpuRepository();
+            foreach (var cpuBenchmarks in benchmarks)
+            {
+                var cpu = (await cpuRepository.ReadAsync(new CpuFilter() { SearchString = cpuBenchmarks.Key })).FirstOrDefault();
+
+                if (cpu == null)
+                {
+                    continue;
+                }
+
+                foreach (var cpuBenchmark in cpuBenchmarks.Value.Details)
+                {
+                    var benchmarkResult = new BenchmarkResult()
+                    {
+                        Value = cpuBenchmarks.Value.Results[cpuBenchmark.Key],
+                        CpuId = cpu.Id,
+                        Output = cpuBenchmark.Value,
+                        Category = "Native",
+                        SubCategory = cpuBenchmark.Key,
+                        Benchmark = cpuBenchmark.Key,
+                    };
+                    benchmarkResultsRepository.Create(benchmarkResult);
+                }
+            }
+
+
+        }
+
+
+        [Test]
         public void LoadCpus()
         {
             var cpusList = ReadCpusCsv("Cpus.csv");
@@ -47,6 +98,7 @@ namespace EntityFx.Tests
             {
                 var cpu = new Cpu()
                 {
+                    Name = cpuItem["Name"],
                     Manufacturer = cpuItem["Vendor"],
                     Model = cpuItem["Model"],
                     Category = cpuItem["Architecture"],
@@ -57,7 +109,7 @@ namespace EntityFx.Tests
                     }
                 };
 
-                cpuRepository.Create(cpu);
+                cpuRepository.Merge(cpu);
             }
         }
 

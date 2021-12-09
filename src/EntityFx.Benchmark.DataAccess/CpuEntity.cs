@@ -126,5 +126,6 @@ namespace EntityFx.BenchmarkDb.DataAccess
         public DateTime CreateDateTime { get; set; }
         public string Features { get; set; }
         public string Description { get; set; }
+        public string Name { get; internal set; }
     }
 }

@@ -22,15 +22,15 @@ namespace EntityFx.BenchmarkDb.DataAccess
 
         public decimal Value { get; set; }
 
-        public decimal Values1 { get; set; }
-        public decimal Values2 { get; set; }
-        public decimal Values3 { get; set; }
-        public decimal Values4 { get; set; }
-        public decimal Values5 { get; set; }
-        public decimal Values6 { get; set; }
-        public decimal Values7 { get; set; }
-        public decimal Values8 { get; set; }
-        public decimal Values9 { get; set; }
+        public decimal Value1 { get; set; }
+        public decimal Value2 { get; set; }
+        public decimal Value3 { get; set; }
+        public decimal Value4 { get; set; }
+        public decimal Value5 { get; set; }
+        public decimal Value6 { get; set; }
+        public decimal Value7 { get; set; }
+        public decimal Value8 { get; set; }
+        public decimal Value9 { get; set; }
 
         public string UnitsOfMeasure { get; set; }
         public DateTime CreateDateTime { get; set; }

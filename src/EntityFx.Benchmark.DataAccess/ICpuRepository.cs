@@ -8,6 +8,7 @@ namespace EntityFx.BenchmarkDb.DataAccess
     public interface ICpuRepository
     {
         void Create(Cpu cpu);
+        void Merge(Cpu cpu);
 
         void Delete(int id);
 

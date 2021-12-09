@@ -38,15 +38,23 @@ namespace EntityFx.BenchmarkDb.DataAccess
 
         public async Task<IEnumerable<Cpu>> ReadAsync(CpuFilter filter)
         {
+            var result = await ReadEntitiesAsync(filter);
+
+            return result == null ? null : result.Select(MapModel);
+        }
+
+        private async Task<IEnumerable<CpuEntity>> ReadEntitiesAsync(CpuFilter filter)
+        {
+
             var queryBuilder = new SqlBuilder()
-                .Select(nameof(CpuEntity.Id))
-                .Select(nameof(CpuEntity.Model))
-                .Select(nameof(CpuEntity.Manufacturer))
-                .Select(nameof(CpuEntity.Category))
-                .Select(nameof(CpuEntity.InstructionSet))
-                .Select(nameof(CpuEntity.ClockInMhz))
-                .Select(nameof(CpuEntity.Cores))
-                .Select(nameof(CpuEntity.Threads));
+             .Select(nameof(CpuEntity.Id))
+             .Select(nameof(CpuEntity.Model))
+             .Select(nameof(CpuEntity.Manufacturer))
+             .Select(nameof(CpuEntity.Category))
+             .Select(nameof(CpuEntity.InstructionSet))
+             .Select(nameof(CpuEntity.ClockInMhz))
+             .Select(nameof(CpuEntity.Cores))
+             .Select(nameof(CpuEntity.Threads));
 
 
             if (filter != null)
@@ -55,8 +63,9 @@ namespace EntityFx.BenchmarkDb.DataAccess
 
                 if (!string.IsNullOrEmpty(filter.SearchString))
                 {
+                    filter.SearchString = filter.SearchString.Replace(" ", "*");
                     parameters.Add("@SearchString", filter.SearchString + "%");
-                    queryBuilder.Where($"{nameof(CpuEntity.Model)} LIKE @SearchString",
+                    queryBuilder.Where($"{nameof(CpuEntity.Model)} LIKE @SearchString OR {nameof(CpuEntity.Name)} LIKE @SearchString",
                         parameters);
                 }
                 else
@@ -77,20 +86,27 @@ namespace EntityFx.BenchmarkDb.DataAccess
             }
 
             var builderTemplate = queryBuilder.AddTemplate("SELECT /**select**/ FROM CpuEntity /**where**/ /**orderby**/");
-            
+
             var result = await Connection.QueryAsync<CpuEntity>(builderTemplate.RawSql, builderTemplate.Parameters);
 
-            return result == null ? Enumerable.Empty<Cpu>() : result.Select(MapModel);
+            return result;
         }
 
 
         public async Task<Cpu> ReadByIdAsync(int cpuId)
         {
+            var result = await ReadEntityByIdAsync(cpuId);
+
+            return result == null ? null : MapModel(result);
+        }
+
+        private async Task<CpuEntity> ReadEntityByIdAsync(int cpuId)
+        {
             var sqlQuery = "SELECT * FROM CpuEntity Where Id = @Id";
 
             var result = await Connection.QuerySingleOrDefaultAsync<CpuEntity>(sqlQuery, new { Id = cpuId });
 
-            return result == null ? null : MapModel(result);
+            return result;
         }
 
         private Cpu MapModel(CpuEntity cpuEntity)
@@ -98,6 +114,7 @@ namespace EntityFx.BenchmarkDb.DataAccess
             return new Cpu()
             {
                 Id = cpuEntity.Id,
+                Name = cpuEntity?.Name,
                 Model = cpuEntity?.Model,
                 Manufacturer = cpuEntity?.Manufacturer,
                 Description = cpuEntity?.Description,
@@ -191,11 +208,78 @@ namespace EntityFx.BenchmarkDb.DataAccess
             };
         }
 
+        private CpuEntity MergeEntity(CpuEntity source, CpuEntity destination)
+        {
+            destination.Model = source.Model ?? destination.Model;
+            destination.Name = source.Name ?? destination.Name;
+            destination.Manufacturer = source.Manufacturer ?? destination.Manufacturer;
+            destination.Description = source?.Description ?? destination.Description;
+            destination.Cores = source.Cores ?? destination.Cores;
+            destination.Threads = source.Threads ?? destination.Cores;
+            destination.Category = source.Category ?? destination.Category;
+            destination.MicroArchitecture = source.MicroArchitecture ?? destination.MicroArchitecture;
+            destination.InstructionSet = source.InstructionSet ?? destination.InstructionSet;
+            destination.ClockInMhz = source.ClockInMhz ?? destination.ClockInMhz;
+            destination.BusInMhz = source.BusInMhz ?? destination.BusInMhz;
+            destination.Multiplier = source.Multiplier ?? destination.Multiplier;
+
+            destination.Family = source.Family ?? destination.Family;
+            destination.Stepping = source.Stepping ?? destination.Stepping;
+            destination.Revision = source.Revision ?? destination.Revision;
+            destination.ModelNumber = source.ModelNumber ?? destination.ModelNumber;
+
+            destination.CacheL1DCacheAssociativity = source.CacheL1DCacheAssociativity ?? destination.CacheL1DCacheAssociativity;
+            destination.CacheL1DSizeKBytes = source.CacheL1DSizeKBytes ?? destination.CacheL1DSizeKBytes;
+            destination.CacheL1DLineSizeInBytes = source.CacheL1DLineSizeInBytes ?? destination.CacheL1DLineSizeInBytes;
+            destination.CacheL1DIsShared = source.CacheL1DIsShared ?? destination.CacheL1DIsShared;
+            destination.CacheL1DDetails = source.CacheL1DDetails ?? destination.CacheL1DDetails;
+            destination.CacheL1ICacheAssociativity = source.CacheL1ICacheAssociativity ?? destination.CacheL1ICacheAssociativity;
+            destination.CacheL1ISizeKBytes = source.CacheL1ISizeKBytes ?? destination.CacheL1ISizeKBytes;
+            destination.CacheL1ILineSizeInBytes = source.CacheL1ILineSizeInBytes ?? destination.CacheL1ILineSizeInBytes;
+            destination.CacheL1IIsShared = source.CacheL1IIsShared ?? destination.CacheL1IIsShared;
+            destination.CacheL1IDetails = source.CacheL1IDetails ?? destination.CacheL1IDetails;
+            destination.CacheL2CacheAssociativity = source.CacheL2CacheAssociativity ?? destination.CacheL2CacheAssociativity;
+            destination.CacheL2SizeKBytes = source.CacheL2SizeKBytes ?? destination.CacheL2SizeKBytes;
+            destination.CacheL2LineSizeInBytes = source.CacheL2LineSizeInBytes ?? destination.CacheL2LineSizeInBytes;
+            destination.CacheL2IsShared = source.CacheL2IsShared ?? destination.CacheL2IsShared;
+            destination.CacheL2Details = source.CacheL2Details ?? destination.CacheL2Details;
+            destination.CacheL3CacheAssociativity = source.CacheL3CacheAssociativity ?? destination.CacheL3CacheAssociativity;
+            destination.CacheL3SizeKBytes = source.CacheL3SizeKBytes ?? destination.CacheL3SizeKBytes;
+            destination.CacheL3LineSizeInBytes = source.CacheL3LineSizeInBytes ?? destination.CacheL3LineSizeInBytes;
+            destination.CacheL3IsShared = source.CacheL3IsShared ?? destination.CacheL3IsShared;
+            destination.CacheL3Details = source.CacheL3Details ?? destination.CacheL3Details;
+            destination.CacheL4CacheAssociativity = source.CacheL4CacheAssociativity ?? destination.CacheL4CacheAssociativity;
+            destination.CacheL4SizeKBytes = source.CacheL4SizeKBytes ?? destination.CacheL4SizeKBytes;
+            destination.CacheL4LineSizeInBytes = source.CacheL4LineSizeInBytes ?? destination.CacheL4LineSizeInBytes;
+            destination.CacheL4IsShared = source.CacheL4IsShared ?? destination.CacheL4IsShared;
+            destination.CacheL4Details = source.CacheL4Details ?? destination.CacheL4Details;
+
+            destination.MemoryControllers = source.MemoryControllers ?? destination.MemoryControllers;
+            destination.MemoryChannels = source.MemoryChannels ?? destination.MemoryChannels;
+            destination.MemoryBandwidthInMbPerSec = source.MemoryBandwidthInMbPerSec ?? destination.MemoryBandwidthInMbPerSec;
+            destination.MemoryMaxMemorySizeInMb = source.MemoryMaxMemorySizeInMb ?? destination.MemoryMaxMemorySizeInMb;
+            destination.MemoryMemoryType = source.MemoryMemoryType ?? destination.MemoryMemoryType;
+            destination.MemoryDetails = source.MemoryDetails ?? destination.MemoryDetails;
+            destination.MemoryEccOnly = source.MemoryEccOnly ?? destination.MemoryEccOnly;
+            destination.CrystalHeightMm = source.CrystalHeightMm ?? destination.CrystalHeightMm;
+            destination.CrystalWidthMm = source.CrystalWidthMm ?? destination.CrystalWidthMm;
+            destination.CrystalArea = source.CrystalArea ?? destination.CrystalArea;
+            destination.TDP = source.TDP ?? destination.TDP;
+            destination.TransistorsCount = source.TransistorsCount ?? destination.TransistorsCount;
+            destination.ProcessInNm = source.ProcessInNm ?? destination.ProcessInNm;
+            destination.PackageHeightMm = source.PackageHeightMm ?? destination.PackageHeightMm;
+            destination.PackageWidthMm = source.PackageWidthMm ?? destination.PackageWidthMm;
+            destination.PackageArea = source.PackageArea ?? destination.PackageArea;
+
+            return destination;
+        }
+
         private CpuEntity MapEntity(Cpu cpu)
         {
             return new CpuEntity()
             {
                 Model = cpu.Model,
+                Name = cpu.Name,
                 Manufacturer = cpu.Manufacturer,
                 Description = cpu?.Description,
                 Cores = cpu.Specs?.Cores,
@@ -267,5 +351,40 @@ namespace EntityFx.BenchmarkDb.DataAccess
             };
         }
 
+        public async void Merge(Cpu cpu)
+        {
+            CpuEntity source = null;
+
+            source = await ReadEntityByIdAsync(cpu.Id);
+            if (source == null)
+            {
+                source = (await ReadEntitiesAsync(new CpuFilter() { SearchString = cpu.Model })).FirstOrDefault();
+            }
+
+            var destination = MapEntity(cpu);
+            if (source == null)
+            {
+                try
+                {
+                    var id = Connection.Insert<CpuEntity>(destination);
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+            } else
+            {
+                destination = MergeEntity(source, destination);
+
+                try
+                {
+                    var id = Connection.Update<CpuEntity>(destination);
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+            }
+        }
     }
 }

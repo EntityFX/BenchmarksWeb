@@ -40,7 +40,7 @@ namespace EntityFx.BenchmarkDb.DataAccess
             var queryBuilder = new SqlBuilder()
                 .Select(nameof(BenchmarkResultEntity.Id))
                 .Select(nameof(BenchmarkResultEntity.Benchmark))
-                .Select(nameof(BenchmarkResultEntity.Value))
+                .Select($"CAST({nameof(BenchmarkResultEntity.Value)} AS REAL) AS {nameof(BenchmarkResultEntity.Value)}")
                 .Select(nameof(BenchmarkResultEntity.UnitsOfMeasure))
                 .Select(nameof(BenchmarkResultEntity.Category))
                 .Select(nameof(BenchmarkResultEntity.SubCategory));
@@ -55,7 +55,6 @@ namespace EntityFx.BenchmarkDb.DataAccess
                 AddFilter(filter.ByCpuId, nameof(BenchmarkResultEntity.CpuId), parameters, queryBuilder);
 
             }
-
             var builderTemplate = queryBuilder.AddTemplate("SELECT /**select**/ FROM BenchmarkResultEntity /**where**/ /**orderby**/");
 
             var result = await Connection.QueryAsync<BenchmarkResultEntity>(builderTemplate.RawSql, builderTemplate.Parameters);
